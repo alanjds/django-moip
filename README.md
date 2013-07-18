@@ -6,7 +6,7 @@ CAUTION: ITS STILL BEING IMPLEMENTED. READ THE FOLLOW AS A BIG TODO-LIST!
 About
 -----
 
-Django MoIP is a pluggable application that implements MoIP using HTML and API integrations
+Django MoIP is a pluggable application that implements MoIP using HTML and API integrations.
 It is based on the [django-paypal](https://github.com/dcramer/django-paypal) work
 from John Boxall, David Cramer and Michael Thornhill (thank you!)
 
@@ -66,7 +66,7 @@ Portuguese "Notificação Instantânea de Transação"
     http://www.example.com/your-return-location/ at MoIP admin dashboard,
     for example. (Shame...)
 
-1.  When someone uses this form to buy something MoIP makes a HTTP POST to 
+1.  When someone uses this form to buy something, MoIP makes a HTTP POST to
     your "notify_url". MoIP calls this "Notificação Instantânea de Transação" (NIT). 
     The view `django_moip.html.nit.views.nit` handles NIT processing. To set the 
     correct `notify_url` add the following to your `urls.py`:
@@ -124,9 +124,9 @@ intentionaly desist after being denied.
 
 You need to set this "return url" manually on MoIP admin dashboard. (Shame again)
 
-To work around, you can set an session attribute `moip_go_after_return_url`, and the
-provided 'return_redirector' will redirect the visitor having this attribute
-set.
+To work around, django-moip allows you to set an session attribute
+`moip_go_after_return_url`, and the provided 'return_redirector' will redirect
+the visitor having this attribute set.
 
 1. Download the code from GitHub:
 
@@ -136,7 +136,7 @@ set.
    Just bewere that MoIP have no such thing as an "identity token", so you cannot
    rely on the call to say that the payment was successful.
    
-   Bottomline: PLEASE, SET THE NIP AND BE SURE
+   Bottomline: PLEASE, SET THE NIT AND BE SURE
 
         # settings.py
         ...
@@ -144,7 +144,7 @@ set.
 
 1.  Create a view that uses `MoipPaymentForm` just like in MoIP NIT section.
 
-1.  After someone uses this form to buy something MoIP will return the user to your site at 
+1.  After someone uses this form to buy something, MoIP will return the user to your site at
     your "return_url" set on MoIP admin dashboard.
     The view `django_moip.html.redirector.views.return_redirector` handles the
     `moip_go_after_return_url` attribute on the visitor session. Please specify
@@ -162,10 +162,10 @@ set.
 Using MoIP with the API integration
 -----------------------------------
 
-MoIP is, right now (2013.07) the only widespread national payment gateway that
+MoIP is, right now (2013.07), the only widespread national payment gateway that
 provides serverside API payments, in the style of PayPal Pro API (WPP).
 
-BUT, they manually authorize every single account for this feature, and I am
+BUT they manually authorize every single account for this feature, and I am
 trying to get this from some time, with no answer from its office. So,
 no feature until I have a way to test it. Bad bad MoIP: no cookie for you!.
 
