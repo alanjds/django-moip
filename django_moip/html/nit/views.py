@@ -3,19 +3,19 @@
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from paypal.standard.ipn.forms import PayPalIPNForm
-from paypal.standard.ipn.models import PayPalIPN
+from django_moip.html.ipn.forms import MoipNITForm
+from django_moip.html.ipn.models import MoipNIT
  
  
 @require_POST
 @csrf_exempt
 def ipn(request, item_check_callable=None):
     """
-    PayPal IPN endpoint (notify_url).
+    PayPal NIT endpoint (notify_url).
     Used by both PayPal Payments Pro and Payments Standard to confirm transactions.
     http://tinyurl.com/d9vu9d
     
-    PayPal IPN Simulator:
+    PayPal NIT Simulator:
     https://developer.paypal.com/cgi-bin/devscr?cmd=_ipn-link-session
     """
     #TODO: Clean up code so that we don't need to set None here and have a lot
@@ -31,7 +31,7 @@ def ipn(request, item_check_callable=None):
         if data.get(date_field) == 'N/A':
             del data[date_field]
 
-    form = PayPalIPNForm(data)
+    form = MoipNITForm(data)
     if form.is_valid():
         try:
             #When commit = False, object is returned without saving to DB.
@@ -42,7 +42,7 @@ def ipn(request, item_check_callable=None):
         flag = "Invalid form. (%s)" % form.errors
  
     if ipn_obj is None:
-        ipn_obj = PayPalIPN()
+        ipn_obj = MoipNIT()
     
     #Set query params and sender's IP address
     ipn_obj.initialize(request)

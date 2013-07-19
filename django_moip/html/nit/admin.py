@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from paypal.standard.ipn.models import PayPalIPN
+from django_moip.html.ipn.models import MoipNIT
 
 
-class PayPalIPNAdmin(admin.ModelAdmin):
+class MoipNITAdmin(admin.ModelAdmin):
     date_hierarchy = 'payment_date'
     fieldsets = (
         (None, {
@@ -66,4 +66,4 @@ class PayPalIPNAdmin(admin.ModelAdmin):
     search_fields = ["txn_id", "recurring_payment_id"]
 
 
-admin.site.register(PayPalIPN, PayPalIPNAdmin)
+admin.site.register(MoipNIT, MoipNITAdmin)

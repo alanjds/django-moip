@@ -2,13 +2,13 @@
 
 from south.db import db
 from django.db import models
-from paypal.standard.pdt.models import *
+from django_moip.html.pdt.models import *
 
 class Migration:
     
     def forwards(self, orm):
         
-        # Adding model 'PayPalPDT'
+        # Adding model 'MoipPDT'
         db.create_table('paypal_pdt', (
             ('id', models.AutoField(primary_key=True)),
             ('business', models.CharField(max_length=127, blank=True)),
@@ -127,13 +127,13 @@ class Migration:
             ('tx', models.CharField(max_length=255, blank=True)),
             ('st', models.CharField(max_length=32, blank=True)),
         ))
-        db.send_create_signal('pdt', ['PayPalPDT'])
+        db.send_create_signal('pdt', ['MoipPDT'])
         
     
     
     def backwards(self, orm):
         
-        # Deleting model 'PayPalPDT'
+        # Deleting model 'MoipPDT'
         db.delete_table('paypal_pdt')
         
     

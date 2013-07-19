@@ -11,7 +11,7 @@ def duplicate_txn_id(ipn_obj):
     
     if ipn_obj.payment_status == "Completed":
         # A payment that was pending and is now completed will have the same
-        # IPN transaction id, so don't flag them as duplicates because it
+        # NIT transaction id, so don't flag them as duplicates because it
         # means that the payment was finally successful!
         query = query.exclude(payment_status = "Pending")
     
@@ -19,17 +19,17 @@ def duplicate_txn_id(ipn_obj):
     
 def make_secret(form_instance, secret_fields=None):
     """
-    Returns a secret for use in a EWP form or an IPN verification based on a
+    Returns a secret for use in a EWP form or an NIT verification based on a
     selection of variables in params. Should only be used with SSL.
     
     """
     # @@@ Moved here as temporary fix to avoid dependancy on auth.models.
     from django.contrib.auth.models import get_hexdigest
-    # @@@ amount is mc_gross on the IPN - where should mapping logic go?
+    # @@@ amount is mc_gross on the NIT - where should mapping logic go?
     # @@@ amount / mc_gross is not nessecarily returned as it was sent - how to use it? 10.00 vs. 10.0
     # @@@ the secret should be based on the invoice or custom fields as well - otherwise its always the same.
     
-    # Build the secret with fields availible in both PaymentForm and the IPN. Order matters.
+    # Build the secret with fields availible in both PaymentForm and the NIT. Order matters.
     if secret_fields is None:
         secret_fields = ['business', 'item_name']
 
@@ -51,7 +51,7 @@ def make_secret(form_instance, secret_fields=None):
 def check_secret(form_instance, secret):
     """
     Returns true if received `secret` matches expected secret for form_instance.
-    Used to verify IPN.
+    Used to verify NIT.
     
     """
     # @@@ add invoice & custom

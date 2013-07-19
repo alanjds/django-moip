@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from paypal.standard.forms import PayPalStandardBaseForm 
-from paypal.standard.ipn.models import PayPalIPN
+from django_moip.html.forms import MoipHtmlBaseForm 
+from django_moip.html.ipn.models import MoipNIT
 
 
-class PayPalIPNForm(PayPalStandardBaseForm):
+class MoipNITForm(MoipHtmlBaseForm):
     """
-    Form used to receive and record PayPal IPN notifications.
+    Form used to receive and record PayPal NIT notifications.
     
-    PayPal IPN test tool:
+    PayPal NIT test tool:
     https://developer.paypal.com/us/cgi-bin/devscr?cmd=_tools-session
     """
     class Meta:
-        model = PayPalIPN
+        model = MoipNIT
 

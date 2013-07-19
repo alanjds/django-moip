@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from paypal.standard.forms import PayPalStandardBaseForm
-from paypal.standard.pdt.models import PayPalPDT
+from django_moip.html.forms import MoipHtmlBaseForm
+from django_moip.html.pdt.models import MoipPDT
 
 
-class PayPalPDTForm(PayPalStandardBaseForm):
+class MoipPDTForm(MoipHtmlBaseForm):
     class Meta:
-        model = PayPalPDT
+        model = MoipPDT

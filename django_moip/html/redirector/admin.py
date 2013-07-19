@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 from string import split as L
 from django.contrib import admin
-from paypal.standard.pdt.models import PayPalPDT
+from django_moip.html.pdt.models import MoipPDT
 
 
-# ToDo: How similiar is this to PayPalIPNAdmin? Could we just inherit off one common admin model?
-class PayPalPDTAdmin(admin.ModelAdmin):
+# ToDo: How similiar is this to MoipNITAdmin? Could we just inherit off one common admin model?
+class MoipPDTAdmin(admin.ModelAdmin):
     date_hierarchy = 'payment_date'
     fieldsets = (
         (None, {
@@ -45,4 +45,4 @@ class PayPalPDTAdmin(admin.ModelAdmin):
     )
     list_display = L("__unicode__ flag invoice custom payment_status created_at")
     search_fields = L("txn_id recurring_payment_id")
-admin.site.register(PayPalPDT, PayPalPDTAdmin)
+admin.site.register(MoipPDT, MoipPDTAdmin)

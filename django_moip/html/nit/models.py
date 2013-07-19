@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import urllib2
-from paypal.standard.models import PayPalStandardBase
-from paypal.standard.ipn.signals import *
+from django_moip.html.models import MoipHtmlBase
+from django_moip.html.ipn.signals import *
 
 
-class PayPalIPN(PayPalStandardBase):
-    """Logs PayPal IPN interactions."""
-    format = u"<IPN: %s %s>"
+class MoipNIT(MoipHtmlBase):
+    """Logs PayPal NIT interactions."""
+    format = u"<NIT: %s %s>"
 
     class Meta:
         db_table = "paypal_ipn"
-        verbose_name = "PayPal IPN"
+        verbose_name = "PayPal NIT"
 
     def _postback(self):
         """Perform PayPal Postback validation."""

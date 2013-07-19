@@ -3,8 +3,8 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.views.decorators.http import require_GET
-from paypal.standard.pdt.models import PayPalPDT
-from paypal.standard.pdt.forms import PayPalPDTForm
+from django_moip.html.pdt.models import MoipPDT
+from django_moip.html.pdt.forms import MoipPDTForm
  
  
 @require_GET
@@ -17,13 +17,13 @@ def pdt(request, item_check_callable=None, template="pdt/pdt.html", context=None
     if txn_id is not None:
         # If an existing transaction with the id tx exists: use it
         try:
-            pdt_obj = PayPalPDT.objects.get(txn_id=txn_id)
-        except PayPalPDT.DoesNotExist:
+            pdt_obj = MoipPDT.objects.get(txn_id=txn_id)
+        except MoipPDT.DoesNotExist:
             # This is a new transaction so we continue processing PDT request
             pass
         
         if pdt_obj is None:
-            form = PayPalPDTForm(request.GET)
+            form = MoipPDTForm(request.GET)
             if form.is_valid():
                 try:
                     pdt_obj = form.save(commit=False)
@@ -35,7 +35,7 @@ def pdt(request, item_check_callable=None, template="pdt/pdt.html", context=None
                 failed = True
             
             if failed:
-                pdt_obj = PayPalPDT()
+                pdt_obj = MoipPDT()
                 pdt_obj.set_flag("Invalid form. %s" % error)
             
             pdt_obj.initialize(request)

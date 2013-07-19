@@ -6,23 +6,23 @@ from django.db import models
 from django.conf import settings
 from django.http import QueryDict
 from django.utils.http import urlencode
-from paypal.standard.models import PayPalStandardBase
-from paypal.standard.conf import POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT
-from paypal.standard.pdt.signals import pdt_successful, pdt_failed
+from django_moip.html.models import MoipHtmlBase
+from django_moip.html.conf import POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT
+from django_moip.html.pdt.signals import pdt_successful, pdt_failed
 
 # ### Todo: Move this logic to conf.py:
-# if paypal.standard.pdt is in installed apps
+# if django_moip.html.pdt is in installed apps
 # ... then check for this setting in conf.py
-class PayPalSettingsError(Exception):
+class MoipSettingsError(Exception):
     """Raised when settings are incorrect."""
 
 try:
-    IDENTITY_TOKEN = settings.PAYPAL_IDENTITY_TOKEN
+    IDENTITY_TOKEN = settings.MOIP_IDENTITY_TOKEN
 except:
-    raise PayPalSettingsError("You must set PAYPAL_IDENTITY_TOKEN in settings.py. Get this token by enabling PDT in your PayPal account.")
+    raise MoipSettingsError("You must set MOIP_IDENTITY_TOKEN in settings.py. Get this token by enabling PDT in your PayPal account.")
 
 
-class PayPalPDT(PayPalStandardBase):
+class MoipPDT(MoipHtmlBase):
     format = u"<PDT: %s %s>"
 
     amt = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
@@ -48,14 +48,14 @@ class PayPalPDT(PayPalStandardBase):
     
     def get_endpoint(self):
         """Use the sandbox when in DEBUG mode as we don't have a test_ipn variable in pdt."""
-        if getattr(settings, 'PAYPAL_DEBUG', settings.DEBUG):
+        if getattr(settings, 'MOIP_DEBUG', settings.DEBUG):
             return SANDBOX_POSTBACK_ENDPOINT
         else:
             return POSTBACK_ENDPOINT
     
     def _verify_postback(self):
         # ### Now we don't really care what result was, just whether a flag was set or not.
-        from paypal.standard.pdt.forms import PayPalPDTForm
+        from django_moip.html.pdt.forms import MoipPDTForm
         result = False
         response_list = self.response.split('\n')
         response_dict = {}
@@ -79,7 +79,7 @@ class PayPalPDT(PayPalStandardBase):
         qd = QueryDict('', mutable=True)
         qd.update(response_dict)
         qd.update(dict(ipaddress=self.ipaddress, st=self.st, flag_info=self.flag_info))
-        pdt_form = PayPalPDTForm(qd, instance=self)
+        pdt_form = MoipPDTForm(qd, instance=self)
         pdt_form.save(commit=False)
         
     def send_signals(self):

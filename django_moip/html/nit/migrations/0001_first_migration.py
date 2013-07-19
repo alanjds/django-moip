@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from south.db import db
-from paypal.standard.ipn.models import *
+from django_moip.html.ipn.models import *
 
 class Migration:    
     def forwards(self, orm):
-        # Adding model 'PayPalIPN'
+        # Adding model 'MoipNIT'
         db.create_table('paypal_ipn', (
             ('id', models.AutoField(primary_key=True)),
             ('business', models.CharField(max_length=127, blank=True)),
@@ -119,10 +119,10 @@ class Migration:
             ('updated_at', models.DateTimeField(auto_now=True)),
             ('from_view', models.CharField(max_length=6, null=True, blank=True)),
         ))
-        db.send_create_signal('ipn', ['PayPalIPN'])
+        db.send_create_signal('ipn', ['MoipNIT'])
 
     def backwards(self, orm):        
-        # Deleting model 'PayPalIPN'
+        # Deleting model 'MoipNIT'
         db.delete_table('paypal_ipn')
 
     models = {

@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('paypal.standard.pdt.views',
+urlpatterns = patterns('django_moip.html.pdt.views',
     (r'^pdt/$', 'pdt'),
 )

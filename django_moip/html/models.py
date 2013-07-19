@@ -2,34 +2,34 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.conf import settings
-from paypal.standard.helpers import duplicate_txn_id, check_secret
-from paypal.standard.conf import RECEIVER_EMAIL, POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT
+from django_moip.html.helpers import duplicate_txn_id, check_secret
+from django_moip.html.conf import RECEIVER_EMAIL, POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT
 
-ST_PP_ACTIVE = 'Active'
-ST_PP_CANCELLED = 'Cancelled'
-ST_PP_CLEARED = 'Cleared'
-ST_PP_COMPLETED = 'Completed'
-ST_PP_DENIED = 'Denied'
-ST_PP_PAID = 'Paid'
-ST_PP_PENDING = 'Pending'
-ST_PP_PROCESSED = 'Processed'
-ST_PP_REFUSED = 'Refused'
-ST_PP_REVERSED = 'Reversed'
-ST_PP_REWARDED = 'Rewarded'
-ST_PP_UNCLAIMED = 'Unclaimed'
-ST_PP_UNCLEARED = 'Uncleared'
+ST_MOIP_ACTIVE = 'Active'
+ST_MOIP_CANCELLED = 'Cancelled'
+ST_MOIP_CLEARED = 'Cleared'
+ST_MOIP_COMPLETED = 'Completed'
+ST_MOIP_DENIED = 'Denied'
+ST_MOIP_PAID = 'Paid'
+ST_MOIP_PENDING = 'Pending'
+ST_MOIP_PROCESSED = 'Processed'
+ST_MOIP_REFUSED = 'Refused'
+ST_MOIP_REVERSED = 'Reversed'
+ST_MOIP_REWARDED = 'Rewarded'
+ST_MOIP_UNCLAIMED = 'Unclaimed'
+ST_MOIP_UNCLEARED = 'Uncleared'
 
 try:
     from idmapper.models import SharedMemoryModel as Model
 except ImportError:
     Model = models.Model
 
-class PayPalStandardBase(Model):
-    """Meta class for common variables shared by IPN and PDT: http://tinyurl.com/cuq6sj"""
+class MoipHtmlBase(Model):
+    """Meta class for common variables shared by NIT and PDT: http://tinyurl.com/cuq6sj"""
     # @@@ Might want to add all these one distant day.
     # FLAG_CODE_CHOICES = (
     # PAYMENT_STATUS_CHOICES = "Canceled_ Reversal Completed Denied Expired Failed Pending Processed Refunded Reversed Voided".split()
-    PAYMENT_STATUS_CHOICES = (ST_PP_ACTIVE, ST_PP_CANCELLED, ST_PP_CLEARED, ST_PP_COMPLETED, ST_PP_DENIED, ST_PP_PAID, ST_PP_PENDING, ST_PP_PROCESSED, ST_PP_REFUSED, ST_PP_REVERSED, ST_PP_REWARDED, ST_PP_UNCLAIMED, ST_PP_UNCLEARED)
+    PAYMENT_STATUS_CHOICES = (ST_MOIP_ACTIVE, ST_MOIP_CANCELLED, ST_MOIP_CLEARED, ST_MOIP_COMPLETED, ST_MOIP_DENIED, ST_MOIP_PAID, ST_MOIP_PENDING, ST_MOIP_PROCESSED, ST_MOIP_REFUSED, ST_MOIP_REVERSED, ST_MOIP_REWARDED, ST_MOIP_UNCLAIMED, ST_MOIP_UNCLEARED)
     # AUTH_STATUS_CHOICES = "Completed Pending Voided".split()
     # ADDRESS_STATUS_CHOICES = "confirmed unconfirmed".split()
     # PAYER_STATUS_CHOICES = "verified / unverified".split()
@@ -171,7 +171,7 @@ class PayPalStandardBase(Model):
     # status_x = models.CharField(max_length=9, blank=True)
     # unique_id_x = models.CharField(max_length=13, blank=True)
 
-    # Non-PayPal Variables - full IPN/PDT query and time fields.    
+    # Non-PayPal Variables - full NIT/PDT query and time fields.    
     ipaddress = models.IPAddressField(blank=True)
     flag = models.BooleanField(default=False, blank=True)
     flag_code = models.CharField(max_length=16, blank=True)
@@ -235,7 +235,7 @@ class PayPalStandardBase(Model):
         
     def verify(self, item_check_callable=None):
         """
-        Verifies an IPN and a PDT.
+        Verifies an NIT and a PDT.
         Checks for obvious signs of weirdness in the payment and flags appropriately.
         
         Provide a callable that takes an instance of this class as a parameter and returns
@@ -266,7 +266,7 @@ class PayPalStandardBase(Model):
         self.send_signals()
 
     def verify_secret(self, form_instance, secret):
-        """Verifies an IPN payment over SSL using EWP."""
+        """Verifies an NIT payment over SSL using EWP."""
         if not check_secret(form_instance, secret):
             self.set_flag("Invalid secret. (%s)") % secret
         self.save()

@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('paypal.standard.ipn.views',            
+urlpatterns = patterns('django_moip.html.ipn.views',            
     url(r'^$', 'ipn', name="paypal-ipn"),
 )
