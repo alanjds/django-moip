@@ -6,7 +6,7 @@ from django_moip.html.nit.models import *
 class Migration:    
     def forwards(self, orm):
         # Adding model 'MoipNIT'
-        db.create_table('paypal_ipn', (
+        db.create_table('moip_nit', (
             ('id', models.AutoField(primary_key=True)),
             ('business', models.CharField(max_length=127, blank=True)),
             ('charset', models.CharField(max_length=32, blank=True)),
@@ -16,7 +16,7 @@ class Migration:
             ('receiver_email', models.EmailField(max_length=127, blank=True)),
             ('receiver_id', models.CharField(max_length=127, blank=True)),
             ('residence_country', models.CharField(max_length=2, blank=True)),
-            ('test_ipn', models.BooleanField(default=False, blank=True)),
+            ('test_nit', models.BooleanField(default=False, blank=True)),
             ('txn_id', models.CharField("Transaction ID", max_length=19, blank=True)),
             ('txn_type', models.CharField("Transaction Type", max_length=128, blank=True)),
             ('verify_sign', models.CharField(max_length=255, blank=True)),
@@ -123,11 +123,11 @@ class Migration:
 
     def backwards(self, orm):        
         # Deleting model 'MoipNIT'
-        db.delete_table('paypal_ipn')
+        db.delete_table('moip_nit')
 
     models = {
         'ipn.paypalipn': {
-            'Meta': {'db_table': '"paypal_ipn"'},
+            'Meta': {'db_table': '"moip_nit"'},
             'address_city': ('models.CharField', [], {'max_length': '40', 'blank': 'True'}),
             'address_country': ('models.CharField', [], {'max_length': '64', 'blank': 'True'}),
             'address_country_code': ('models.CharField', [], {'max_length': '64', 'blank': 'True'}),
@@ -230,7 +230,7 @@ class Migration:
             'subscr_effective': ('models.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'subscr_id': ('models.CharField', [], {'max_length': '19', 'blank': 'True'}),
             'tax': ('models.DecimalField', [], {'default': '0', 'null': 'True', 'max_digits': '64', 'decimal_places': '2', 'blank': 'True'}),
-            'test_ipn': ('models.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'test_nit': ('models.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'time_created': ('models.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'transaction_entity': ('models.CharField', [], {'max_length': '7', 'blank': 'True'}),
             'transaction_subject': ('models.CharField', [], {'max_length': '255', 'blank': 'True'}),

@@ -51,12 +51,12 @@ class PDTTest(TestCase):
 
     def test_verify_postback(self):
         dpppdt = DummyMoipPDT()
-        paypal_response = dpppdt._postback()
-        assert('SUCCESS' in paypal_response)
+        moip_response = dpppdt._postback()
+        assert('SUCCESS' in moip_response)
         self.assertEqual(len(MoipPDT.objects.all()), 0)
         pdt_obj = MoipPDT()
         pdt_obj.ipaddress = '127.0.0.1'
-        pdt_obj.response = paypal_response
+        pdt_obj.response = moip_response
         pdt_obj._verify_postback()
         self.assertEqual(len(MoipPDT.objects.all()), 0)
         self.assertEqual(pdt_obj.txn_id, '1ED550410S3402306')
@@ -64,8 +64,8 @@ class PDTTest(TestCase):
     def test_pdt(self):        
         self.assertEqual(len(MoipPDT.objects.all()), 0)        
         self.dpppdt.update_with_get_params(self.get_params)
-        paypal_response = self.client.get("/pdt/", self.get_params)        
-        self.assertContains(paypal_response, 'Transaction complete', status_code=200)
+        moip_response = self.client.get("/pdt/", self.get_params)        
+        self.assertContains(moip_response, 'Transaction complete', status_code=200)
         self.assertEqual(len(MoipPDT.objects.all()), 1)
 
     def test_pdt_signals(self):
@@ -81,8 +81,8 @@ class PDTTest(TestCase):
         pdt_failed.connect(failed_pdt)
         
         self.assertEqual(len(MoipPDT.objects.all()), 0)        
-        paypal_response = self.client.get("/pdt/", self.get_params)
-        self.assertContains(paypal_response, 'Transaction complete', status_code=200)        
+        moip_response = self.client.get("/pdt/", self.get_params)
+        self.assertContains(moip_response, 'Transaction complete', status_code=200)        
         self.assertEqual(len(MoipPDT.objects.all()), 1)
         self.assertTrue(self.successful_pdt_fired)
         self.assertFalse(self.failed_pdt_fired)        
@@ -91,13 +91,13 @@ class PDTTest(TestCase):
         
     def test_double_pdt_get(self):
         self.assertEqual(len(MoipPDT.objects.all()), 0)            
-        paypal_response = self.client.get("/pdt/", self.get_params)
-        self.assertContains(paypal_response, 'Transaction complete', status_code=200)
+        moip_response = self.client.get("/pdt/", self.get_params)
+        self.assertContains(moip_response, 'Transaction complete', status_code=200)
         self.assertEqual(len(MoipPDT.objects.all()), 1)
         pdt_obj = MoipPDT.objects.all()[0]        
         self.assertEqual(pdt_obj.flag, False)        
-        paypal_response = self.client.get("/pdt/", self.get_params)
-        self.assertContains(paypal_response, 'Transaction complete', status_code=200)
+        moip_response = self.client.get("/pdt/", self.get_params)
+        self.assertContains(moip_response, 'Transaction complete', status_code=200)
         self.assertEqual(len(MoipPDT.objects.all()), 1) # we don't create a new pdt        
         pdt_obj = MoipPDT.objects.all()[0]
         self.assertEqual(pdt_obj.flag, False)
@@ -105,15 +105,15 @@ class PDTTest(TestCase):
     def test_no_txn_id_in_pdt(self):
         self.dpppdt.context_dict.pop('txn_id')
         self.get_params={}
-        paypal_response = self.client.get("/pdt/", self.get_params)
-        self.assertContains(paypal_response, 'Transaction Failed', status_code=200)
+        moip_response = self.client.get("/pdt/", self.get_params)
+        self.assertContains(moip_response, 'Transaction Failed', status_code=200)
         self.assertEqual(len(MoipPDT.objects.all()), 0)
         
     def test_custom_passthrough(self):
         self.assertEqual(len(MoipPDT.objects.all()), 0)        
         self.dpppdt.update_with_get_params(self.get_params)
-        paypal_response = self.client.get("/pdt/", self.get_params)
-        self.assertContains(paypal_response, 'Transaction complete', status_code=200)
+        moip_response = self.client.get("/pdt/", self.get_params)
+        self.assertContains(moip_response, 'Transaction complete', status_code=200)
         self.assertEqual(len(MoipPDT.objects.all()), 1)
         pdt_obj = MoipPDT.objects.all()[0]
         self.assertEqual(pdt_obj.custom, self.get_params['cm'] )

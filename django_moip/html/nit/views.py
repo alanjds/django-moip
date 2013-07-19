@@ -16,7 +16,7 @@ def ipn(request, item_check_callable=None):
     http://tinyurl.com/d9vu9d
     
     PayPal NIT Simulator:
-    https://developer.paypal.com/cgi-bin/devscr?cmd=_ipn-link-session
+    https://developer.paypal.com/cgi-bin/devscr?cmd=_nit-link-session
     """
     #TODO: Clean up code so that we don't need to set None here and have a lot
     #      of if checks just to determine if flag is set.

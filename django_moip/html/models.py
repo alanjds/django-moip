@@ -39,7 +39,7 @@ class MoipHtmlBase(Model):
     # TRANSACTION_ENTITY_CHOICES = "auth reauth order payment".split()
     
     # Transaction and Notification-Related Variables
-    test_ipn = models.BooleanField(default=False, blank=True)
+    test_nit = models.BooleanField(default=False, blank=True)
     txn_id = models.CharField("Transaction ID", max_length=19, blank=True, help_text="PayPal transaction ID.", db_index=True)
 
     # Buyer Information Variables
@@ -159,7 +159,7 @@ class MoipHtmlBase(Model):
 
     def get_endpoint(self):
         """Set Sandbox endpoint if the test variable is present."""
-        if self.test_ipn:
+        if self.test_nit:
             return SANDBOX_POSTBACK_ENDPOINT
         else:
             return POSTBACK_ENDPOINT

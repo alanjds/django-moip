@@ -54,7 +54,7 @@ class MoipNITAdmin(admin.ModelAdmin):
             "description": "Additional Info.",
             "classes": ('collapse',),
             "fields": [
-                "test_ipn", "ipaddress", "query", "response", "flag_code", 
+                "test_nit", "ipaddress", "query", "response", "flag_code", 
                 "flag_info"
             ]
         }),

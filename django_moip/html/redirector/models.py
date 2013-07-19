@@ -32,7 +32,7 @@ class MoipPDT(MoipHtmlBase):
     st = models.CharField(max_length=32, blank=True)
 
     class Meta:
-        db_table = "paypal_pdt"
+        db_table = "moip_pdt"
         verbose_name = "PayPal PDT"
 
     def _postback(self):
@@ -47,7 +47,7 @@ class MoipPDT(MoipHtmlBase):
         return urllib2.urlopen(self.get_endpoint(), postback_params).read()
     
     def get_endpoint(self):
-        """Use the sandbox when in DEBUG mode as we don't have a test_ipn variable in pdt."""
+        """Use the sandbox when in DEBUG mode as we don't have a test_nit variable in pdt."""
         if getattr(settings, 'MOIP_DEBUG', settings.DEBUG):
             return SANDBOX_POSTBACK_ENDPOINT
         else:

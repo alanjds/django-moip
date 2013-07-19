@@ -30,7 +30,7 @@ NIT_POST_PARAMS = {
     "custom": "website_id=13&user_id=21",
     "notify_version": "2.6",
     "transaction_subject": "",
-    "test_ipn": "1",
+    "test_nit": "1",
     "item_number": "",
     "receiver_id": "258DLEHY2BDK6",
     "payer_id": "BN5JZ2V7MLEV4",
@@ -107,10 +107,10 @@ class NITTest(TestCase):
         self.assertTrue(self.got_signal)
         self.assertEqual(self.signal_obj, ipn_obj)
         
-    def test_correct_ipn(self):
+    def test_correct_nit(self):
         self.assertGotSignal(payment_was_successful, False)
 
-    def test_failed_ipn(self):
+    def test_failed_nit(self):
         MoipNIT._postback = lambda self: "INVALID"
         self.assertGotSignal(payment_was_flagged, True)
 
@@ -151,7 +151,7 @@ class NITTest(TestCase):
         self.assertEqual(ipn_obj.flag, True)
         self.assertEqual(ipn_obj.flag_info, "Duplicate txn_id. (51403485VH153354B)")
 
-    def test_recurring_payment_skipped_ipn(self):
+    def test_recurring_payment_skipped_nit(self):
         update = {
             "recurring_payment_id": "BN5JZ2V7MLEV4",
             "txn_type": "recurring_payment_skipped",
@@ -162,7 +162,7 @@ class NITTest(TestCase):
         
         self.assertGotSignal(recurring_skipped, False, params)
 
-    def test_recurring_payment_failed_ipn(self):
+    def test_recurring_payment_failed_nit(self):
         update = {
             "recurring_payment_id": "BN5JZ2V7MLEV4",
             "txn_type": "recurring_payment_failed",
@@ -173,7 +173,7 @@ class NITTest(TestCase):
         
         self.assertGotSignal(recurring_failed, False, params)
 
-    def test_recurring_payment_create_ipn(self):
+    def test_recurring_payment_create_nit(self):
         update = {
             "recurring_payment_id": "BN5JZ2V7MLEV4",
             "txn_type": "recurring_payment_profile_created",
@@ -184,7 +184,7 @@ class NITTest(TestCase):
         
         self.assertGotSignal(recurring_create, False, params)
 
-    def test_recurring_payment_cancel_ipn(self):
+    def test_recurring_payment_cancel_nit(self):
         update = {
             "recurring_payment_id": "BN5JZ2V7MLEV4",
             "txn_type": "recurring_payment_profile_cancel",
@@ -195,7 +195,7 @@ class NITTest(TestCase):
         
         self.assertGotSignal(recurring_cancel, False, params)
 
-    def test_recurring_payment_ipn(self):
+    def test_recurring_payment_nit(self):
         """
         The wat the code is written in 
         MoipNIT.send_signals the recurring_payment 

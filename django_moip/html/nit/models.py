@@ -6,15 +6,15 @@ from django_moip.html.nit.signals import *
 
 
 class MoipNIT(MoipHtmlBase):
-    """Logs PayPal NIT interactions."""
+    """Logs MoIP NIT interactions."""
     format = u"<NIT: %s %s>"
 
     class Meta:
-        db_table = "paypal_ipn"
-        verbose_name = "PayPal NIT"
+        db_table = "moip_nit"
+        verbose_name = "MoIP NIT"
 
     def _postback(self):
-        """Perform PayPal Postback validation."""
+        """Perform MoIP Postback validation."""
         return urllib2.urlopen(self.get_endpoint(), "cmd=_notify-validate&%s" % self.query).read()
     
     def _verify_postback(self):

@@ -40,7 +40,7 @@ class MoipPDTAdmin(admin.ModelAdmin):
         ("Admin", {
             "description": "Additional Info.",
             "classes": ('collapse',),
-            "fields": L("test_ipn ipaddress query flag_code flag_info")
+            "fields": L("test_nit ipaddress query flag_code flag_info")
         }),
     )
     list_display = L("__unicode__ flag invoice custom payment_status created_at")

@@ -6,10 +6,9 @@ from django_moip.html.nit.models import MoipNIT
 
 class MoipNITForm(MoipHtmlBaseForm):
     """
-    Form used to receive and record PayPal NIT notifications.
+    Form used to receive and record MoIP NIT notifications.
     
-    PayPal NIT test tool:
-    https://developer.paypal.com/us/cgi-bin/devscr?cmd=_tools-session
+    (MoIP have no official NIT test tool)
     """
     class Meta:
         model = MoipNIT
