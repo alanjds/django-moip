@@ -33,36 +33,26 @@ class MoipPaymentsForm(forms.Form):
     """    
     SHIPPING_CHOICES = ((0, "No shipping"), (1, "Shipping"))
     NO_NOTE_CHOICES = ((1, "No Note"), (0, "Include Note"))
-    RECURRING_PAYMENT_CHOICES = (
-        (1, "Subscription Payments Recur"), 
-        (0, "Subscription payments do not recur")
-    )
-    REATTEMPT_ON_FAIL_CHOICES = (
-        (1, "reattempt billing on Failure"), 
-        (0, "Do Not reattempt on failure")
-    )
 
     BUY = 'buy'
     SUBSCRIBE = 'subscribe'
     DONATE = 'donate'
 
     # Where the money goes.
-    business = forms.CharField(widget=ValueHiddenInput(), initial=RECEIVER_EMAIL)
+    id_carteira = forms.CharField(widget=ValueHiddenInput(), initial=RECEIVER_EMAIL) # up to 45chr
     
     # Item information.
-    amount = forms.IntegerField(widget=ValueHiddenInput())
-    item_name = forms.CharField(widget=ValueHiddenInput())
-    item_number = forms.CharField(widget=ValueHiddenInput())
-    quantity = forms.CharField(widget=ValueHiddenInput())
+    valor = forms.IntegerField(widget=ValueHiddenInput()) # up to 9chr
+    nome = forms.CharField(widget=ValueHiddenInput()) # up to 64chr
 
-    # NIT control.
-    id_transacao = forms.CharField(widget=ValueHiddenInput())
+    # Recommended but optional
+    # (Note: 'id_transacao' will be available to the NIT control if provided)
+    descricao = forms.CharField(widget=ValueHiddenInput()) # up to 256chr
+    id_transacao = forms.CharField(widget=ValueHiddenInput()) # up to 32chr
 
-    # Default fields.
-
-    ## Optional fields
+    # Optional fields
     frete = forms.ChoiceField(widget=forms.HiddenInput(), choices=SHIPPING_CHOICES, 
-        initial=SHIPPING_CHOICES[0][0])
+        initial=SHIPPING_CHOICES[0][0]) # up to 1chr
 
     def __init__(self, button_type="buy", *args, **kwargs):
         super(MoipPaymentsForm, self).__init__(*args, **kwargs)
@@ -71,14 +61,14 @@ class MoipPaymentsForm(forms.Form):
     def render(self):
         return mark_safe(u"""<form action="%s" method="post">
     %s
-    <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
+    <input type="image" src="%s" border="0" name="submit" alt="Pagar" />
 </form>""" % (POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
         
         
     def sandbox(self):
         return mark_safe(u"""<form action="%s" method="post">
     %s
-    <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
+    <input type="image" src="%s" border="0" name="submit" alt="Pagar" />
 </form>""" % (SANDBOX_POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
         
     def get_image(self):
@@ -101,85 +91,8 @@ class MoipPaymentsForm(forms.Form):
         return self.button_type == self.SUBSCRIBE
 
 
-class MoipEncryptedPaymentsForm(MoipPaymentsForm):
-    """
-    Creates a PayPal Encrypted Payments "Buy It Now" button.
-    Requires the M2Crypto package.
-
-    Based on example at:
-    http://blog.mauveweb.co.uk/2007/10/10/paypal-with-django/
-    
-    """
-    def _encrypt(self):
-        """Use your key thing to encrypt things."""
-        from M2Crypto import BIO, SMIME, X509
-        # @@@ Could we move this to conf.py?
-        CERT = settings.MOIP_PRIVATE_CERT
-        PUB_CERT = settings.MOIP_PUBLIC_CERT
-        MOIP_CERT = settings.MOIP_CERT
-        CERT_ID = settings.MOIP_CERT_ID
-
-        # Iterate through the fields and pull out the ones that have a value.
-        plaintext = 'cert_id=%s\n' % CERT_ID
-        for name, field in self.fields.iteritems():
-            value = None
-            if name in self.initial:
-                value = self.initial[name]
-            elif field.initial is not None:
-                value = field.initial
-            if value is not None:
-                # @@@ Make this less hackish and put it in the widget.
-                if name == "return_url":
-                    name = "return"
-                plaintext += u'%s=%s\n' % (name, value)
-        plaintext = plaintext.encode('utf-8')
-        
-        # Begin crypto weirdness.
-        s = SMIME.SMIME()
-        s.load_key_bio(BIO.openfile(CERT), BIO.openfile(PUB_CERT))
-        p7 = s.sign(BIO.MemoryBuffer(plaintext), flags=SMIME.PKCS7_BINARY)
-        x509 = X509.load_cert_bio(BIO.openfile(settings.MOIP_CERT))
-        sk = X509.X509_Stack()
-        sk.push(x509)
-        s.set_x509_stack(sk)
-        s.set_cipher(SMIME.Cipher('des_ede3_cbc'))
-        tmp = BIO.MemoryBuffer()
-        p7.write_der(tmp)
-        p7 = s.encrypt(tmp, flags=SMIME.PKCS7_BINARY)
-        out = BIO.MemoryBuffer()
-        p7.write(out)
-        return out.read()
-    
-    def as_p(self):
-        return mark_safe(u"""
-<input type="hidden" name="cmd" value="_s-xclick" />
-<input type="hidden" name="encrypted" value="%s" />
-        """ % self._encrypt())
-
-
-class MoipSharedSecretEncryptedPaymentsForm(MoipEncryptedPaymentsForm):
-    """
-    Creates a PayPal Encrypted Payments "Buy It Now" button with a Shared Secret.
-    Shared secrets should only be used when your NIT endpoint is on HTTPS.
-    
-    Adds a secret to the notify_url based on the contents of the form.
-
-    """
-    def __init__(self, *args, **kwargs):
-        "Make the secret from the form initial data and slip it into the form."
-        from django_moip.html.helpers import make_secret
-        super(MoipSharedSecretEncryptedPaymentsForm, self).__init__(*args, **kwargs)
-        # @@@ Attach the secret parameter in a way that is safe for other query params.
-        secret_param = "?secret=%s" % make_secret(self)
-        # Initial data used in form construction overrides defaults
-        if 'notify_url' in self.initial:
-            self.initial['notify_url'] += secret_param
-        else:
-            self.fields['notify_url'].initial += secret_param
-
-
 class MoipHtmlBaseForm(forms.ModelForm):
-    """Form used to receive and record PayPal NIT/PDT."""
+    """Form used to receive and record MoIP NIT/Redirector."""
     # PayPal dates have non-standard formats.
     time_created = forms.DateTimeField(required=False, input_formats=MOIP_DATE_FORMAT)
     payment_date = forms.DateTimeField(required=False, input_formats=MOIP_DATE_FORMAT)
