@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django_moip.html.nit.models import MoipNIT
 
-
+# TODO: Clean this unused mess
 class MoipNITAdmin(admin.ModelAdmin):
     date_hierarchy = 'payment_date'
     fieldsets = (
