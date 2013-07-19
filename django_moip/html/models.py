@@ -40,7 +40,7 @@ class MoipHtmlBase(Model):
     
     # Transaction and Notification-Related Variables
     test_nit = models.BooleanField(default=False, blank=True)
-    txn_id = models.CharField("Transaction ID", max_length=19, blank=True, help_text="PayPal transaction ID.", db_index=True)
+    txn_id = models.CharField("Transaction ID", max_length=19, blank=True, help_text="MoIP transaction ID.", db_index=True)
 
     # Buyer Information Variables
     payer_email = models.CharField(max_length=127, blank=True)
@@ -56,12 +56,12 @@ class MoipHtmlBase(Model):
     handling_amount = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
     transaction_subject = models.CharField(max_length=255, blank=True)
 
-    # Non-PayPal Variables - full NIT/PDT query and time fields.    
+    # Non-MoIP Variables - full NIT/PDT query and time fields.    
     ipaddress = models.IPAddressField(blank=True)
     flag = models.BooleanField(default=False, blank=True)
     flag_code = models.CharField(max_length=16, blank=True)
     flag_info = models.TextField(blank=True)
-    query = models.TextField(blank=True)  # What we sent to PayPal.
+    query = models.TextField(blank=True)  # What we sent to MoIP.
     response = models.TextField(blank=True)  # What we got back.
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -195,7 +195,7 @@ class MoipHtmlBase(Model):
         self.ipaddress = request.META.get('REMOTE_ADDR', '')
 
     def _postback(self):
-        """Perform postback to PayPal and store the response in self.response."""
+        """Perform postback to MoIP and store the response in self.response."""
         raise NotImplementedError
         
     def _verify_postback(self):

@@ -13,7 +13,7 @@ from furl import furl
 
 # 20:18:05 Jan 30, 2009 PST - PST timezone support is not included out of the box.
 # MOIP_DATE_FORMAT = ("%H:%M:%S %b. %d, %Y PST", "%H:%M:%S %b %d, %Y PST",)
-# PayPal dates have been spotted in the wild with these formats, beware!
+# MoIP dates have been spotted in the wild with these formats, beware!
 MOIP_DATE_FORMAT = ("%H:%M:%S %b. %d, %Y PST",
                       "%H:%M:%S %b. %d, %Y PDT",
                       "%H:%M:%S %b %d, %Y PST",
@@ -129,7 +129,7 @@ class MoipPaymentsForm(forms.Form):
 
 class MoipHtmlBaseForm(forms.ModelForm):
     """Form used to receive and record MoIP NIT/Redirector."""
-    # PayPal dates have non-standard formats.
+    # MoIP dates have non-standard formats.
     time_created = forms.DateTimeField(required=False, input_formats=MOIP_DATE_FORMAT)
     payment_date = forms.DateTimeField(required=False, input_formats=MOIP_DATE_FORMAT)
     next_payment_date = forms.DateTimeField(required=False, input_formats=MOIP_DATE_FORMAT)

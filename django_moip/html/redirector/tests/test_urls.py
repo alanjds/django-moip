@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('django_moip.html.pdt.views',
+urlpatterns = patterns('django_moip.html.redirector.views',
     (r'^pdt/$', 'pdt'),
 )

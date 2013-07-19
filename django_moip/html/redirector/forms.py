@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django_moip.html.forms import MoipHtmlBaseForm
-from django_moip.html.pdt.models import MoipPDT
+from django_moip.html.redirector.models import MoipRedirector
 
 
-class MoipPDTForm(MoipHtmlBaseForm):
+class MoipRedirectorForm(MoipHtmlBaseForm):
     class Meta:
-        model = MoipPDT
+        model = MoipRedirector

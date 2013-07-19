@@ -7,10 +7,10 @@ http://code.djangoproject.com/wiki/Signals#Helppost_saveseemstobeemittedtwicefor
 from django.dispatch import Signal
 
 # Sent when a payment is successfully processed.
-pdt_successful = Signal()
+redirector_successful = Signal()
 
 # Sent when a payment is flagged.
-pdt_failed = Signal()
+redirector_failed = Signal()
 
 # # Sent when a subscription was cancelled.
 # subscription_cancel = Signal()

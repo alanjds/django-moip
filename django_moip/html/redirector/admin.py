@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 from string import split as L
 from django.contrib import admin
-from django_moip.html.pdt.models import MoipPDT
+from django_moip.html.redirector.models import MoipRedirector
 
 
 # ToDo: How similiar is this to MoipNITAdmin? Could we just inherit off one common admin model?
-class MoipPDTAdmin(admin.ModelAdmin):
+class MoipRedirectorAdmin(admin.ModelAdmin):
     date_hierarchy = 'payment_date'
     fieldsets = (
         (None, {
@@ -45,4 +45,4 @@ class MoipPDTAdmin(admin.ModelAdmin):
     )
     list_display = L("__unicode__ flag invoice custom payment_status created_at")
     search_fields = L("txn_id recurring_payment_id")
-admin.site.register(MoipPDT, MoipPDTAdmin)
+admin.site.register(MoipRedirector, MoipRedirectorAdmin)

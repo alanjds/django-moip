@@ -1,14 +1,14 @@
-{% ifequal pdt_obj.st 'SUCCESS' %}
+{% ifequal redirector_obj.st 'SUCCESS' %}
 <h1>Transaction complete</h1>
 <p>Thank you for your payment</p>
 <p>Please print this page for your records</p>
 
 <div>	
 	<table>
-	<tr><td>Payer:</td><td>{{ pdt_obj.first_name }} {{ pdt_obj.last_name }} </td></tr>
-	<tr><td>Payer Email:</td><td>{{ pdt_obj.payer_email }}</td></tr>	
-	<tr><td>Amount:</td><td>{{ pdt_obj.mc_currency }} {{ pdt_obj.mc_gross }}</td></tr>		
-	<tr><td>Reference:</td><td>{{ pdt_obj.txn_id }}</td></tr>
+	<tr><td>Payer:</td><td>{{ redirector_obj.first_name }} {{ redirector_obj.last_name }} </td></tr>
+	<tr><td>Payer Email:</td><td>{{ redirector_obj.payer_email }}</td></tr>	
+	<tr><td>Amount:</td><td>{{ redirector_obj.mc_currency }} {{ redirector_obj.mc_gross }}</td></tr>		
+	<tr><td>Reference:</td><td>{{ redirector_obj.txn_id }}</td></tr>
 	
 	</table>
 </div>

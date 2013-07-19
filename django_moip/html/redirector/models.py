@@ -8,10 +8,10 @@ from django.http import QueryDict
 from django.utils.http import urlencode
 from django_moip.html.models import MoipHtmlBase
 from django_moip.html.conf import POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT
-from django_moip.html.pdt.signals import pdt_successful, pdt_failed
+from django_moip.html.redirector.signals import redirector_successful, redirector_failed
 
 # ### Todo: Move this logic to conf.py:
-# if django_moip.html.pdt is in installed apps
+# if django_moip.html.redirector is in installed apps
 # ... then check for this setting in conf.py
 class MoipSettingsError(Exception):
     """Raised when settings are incorrect."""
@@ -19,11 +19,11 @@ class MoipSettingsError(Exception):
 try:
     IDENTITY_TOKEN = settings.MOIP_IDENTITY_TOKEN
 except:
-    raise MoipSettingsError("You must set MOIP_IDENTITY_TOKEN in settings.py. Get this token by enabling PDT in your PayPal account.")
+    raise MoipSettingsError("You must set MOIP_IDENTITY_TOKEN in settings.py. Get this token by enabling Redirector in your MoIP account.")
 
 
-class MoipPDT(MoipHtmlBase):
-    format = u"<PDT: %s %s>"
+class MoipRedirector(MoipHtmlBase):
+    format = u"<Redirector: %s %s>"
 
     amt = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
     cm = models.CharField(max_length=255, blank=True)
@@ -32,13 +32,13 @@ class MoipPDT(MoipHtmlBase):
     st = models.CharField(max_length=32, blank=True)
 
     class Meta:
-        db_table = "moip_pdt"
-        verbose_name = "PayPal PDT"
+        db_table = "moip_redirector"
+        verbose_name = "MoIP Redirector"
 
     def _postback(self):
         """
-        Perform PayPal PDT Postback validation.
-        Sends the transaction ID and business token to PayPal which responses with
+        Perform MoIP Redirector Postback validation.
+        Sends the transaction ID and business token to MoIP which responses with
         SUCCESS or FAILED.
         
         """
@@ -47,7 +47,7 @@ class MoipPDT(MoipHtmlBase):
         return urllib2.urlopen(self.get_endpoint(), postback_params).read()
     
     def get_endpoint(self):
-        """Use the sandbox when in DEBUG mode as we don't have a test_nit variable in pdt."""
+        """Use the sandbox when in DEBUG mode as we don't have a test_nit variable in redirector."""
         if getattr(settings, 'MOIP_DEBUG', settings.DEBUG):
             return SANDBOX_POSTBACK_ENDPOINT
         else:
@@ -55,7 +55,7 @@ class MoipPDT(MoipHtmlBase):
     
     def _verify_postback(self):
         # ### Now we don't really care what result was, just whether a flag was set or not.
-        from django_moip.html.pdt.forms import MoipPDTForm
+        from django_moip.html.redirector.forms import MoipRedirectorForm
         result = False
         response_list = self.response.split('\n')
         response_dict = {}
@@ -79,12 +79,12 @@ class MoipPDT(MoipHtmlBase):
         qd = QueryDict('', mutable=True)
         qd.update(response_dict)
         qd.update(dict(ipaddress=self.ipaddress, st=self.st, flag_info=self.flag_info))
-        pdt_form = MoipPDTForm(qd, instance=self)
-        pdt_form.save(commit=False)
+        redirector_form = MoipRedirectorForm(qd, instance=self)
+        redirector_form.save(commit=False)
         
     def send_signals(self):
-        # Send the PDT signals...
+        # Send the Redirector signals...
         if self.flag:
-            pdt_failed.send(sender=self)
+            redirector_failed.send(sender=self)
         else:
-            pdt_successful.send(sender=self)
+            redirector_successful.send(sender=self)
