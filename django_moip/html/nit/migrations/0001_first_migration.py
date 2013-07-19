@@ -119,7 +119,7 @@ class Migration:
             ('updated_at', models.DateTimeField(auto_now=True)),
             ('from_view', models.CharField(max_length=6, null=True, blank=True)),
         ))
-        db.send_create_signal('ipn', ['MoipNIT'])
+        db.send_create_signal('nit', ['MoipNIT'])
 
     def backwards(self, orm):        
         # Deleting model 'MoipNIT'
@@ -241,4 +241,4 @@ class Migration:
             'verify_sign': ('models.CharField', [], {'max_length': '255', 'blank': 'True'})
         }
     }
-    complete_apps = ['ipn']
+    complete_apps = ['nit']
