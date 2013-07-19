@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('django_moip.html.ipn.views',
+urlpatterns = patterns('django_moip.html.nit.views',
     (r'^ipn/$', 'ipn'),
 )

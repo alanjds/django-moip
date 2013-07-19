@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import urllib2
 from django_moip.html.models import MoipHtmlBase
-from django_moip.html.ipn.signals import *
+from django_moip.html.nit.signals import *
 
 
 class MoipNIT(MoipHtmlBase):

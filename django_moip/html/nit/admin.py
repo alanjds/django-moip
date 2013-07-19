@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from django_moip.html.ipn.models import MoipNIT
+from django_moip.html.nit.models import MoipNIT
 
 
 class MoipNITAdmin(admin.ModelAdmin):

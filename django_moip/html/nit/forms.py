@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django_moip.html.forms import MoipHtmlBaseForm 
-from django_moip.html.ipn.models import MoipNIT
+from django_moip.html.nit.models import MoipNIT
 
 
 class MoipNITForm(MoipHtmlBaseForm):

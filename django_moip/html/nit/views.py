@@ -3,8 +3,8 @@
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django_moip.html.ipn.forms import MoipNITForm
-from django_moip.html.ipn.models import MoipNIT
+from django_moip.html.nit.forms import MoipNITForm
+from django_moip.html.nit.models import MoipNIT
  
  
 @require_POST

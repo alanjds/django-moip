@@ -4,8 +4,8 @@ from django.test import TestCase
 from django.test.client import Client
 
 from django_moip.html.models import ST_MOIP_CANCELLED
-from django_moip.html.ipn.models import MoipNIT
-from django_moip.html.ipn.signals import (payment_was_successful, 
+from django_moip.html.nit.models import MoipNIT
+from django_moip.html.nit.signals import (payment_was_successful, 
     payment_was_flagged, recurring_skipped, recurring_failed,
     recurring_create, recurring_payment, recurring_cancel)
 
@@ -47,7 +47,7 @@ NIT_POST_PARAMS = {
 
 
 class NITTest(TestCase):    
-    urls = 'django_moip.html.ipn.tests.test_urls'
+    urls = 'django_moip.html.nit.tests.test_urls'
 
     def setUp(self):
         self.old_debug = settings.DEBUG

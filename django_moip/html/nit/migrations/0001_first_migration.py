@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from south.db import db
-from django_moip.html.ipn.models import *
+from django_moip.html.nit.models import *
 
 class Migration:    
     def forwards(self, orm):
