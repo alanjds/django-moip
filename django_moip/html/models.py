@@ -39,137 +39,22 @@ class MoipHtmlBase(Model):
     # TRANSACTION_ENTITY_CHOICES = "auth reauth order payment".split()
     
     # Transaction and Notification-Related Variables
-    business = models.CharField(max_length=127, blank=True, help_text="Email where the money was sent.")
-    charset=models.CharField(max_length=32, blank=True)
-    custom = models.CharField(max_length=255, blank=True)
-    notify_version = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    parent_txn_id = models.CharField("Parent Transaction ID", max_length=19, blank=True)
-    receiver_email = models.EmailField(max_length=127, blank=True)
-    receiver_id = models.CharField(max_length=127, blank=True)  # 258DLEHY2BDK6
-    residence_country = models.CharField(max_length=2, blank=True)
     test_ipn = models.BooleanField(default=False, blank=True)
     txn_id = models.CharField("Transaction ID", max_length=19, blank=True, help_text="PayPal transaction ID.", db_index=True)
-    txn_type = models.CharField("Transaction Type", max_length=128, blank=True, help_text="PayPal transaction type.")
-    verify_sign = models.CharField(max_length=255, blank=True)    
-    
+
     # Buyer Information Variables
-    address_country = models.CharField(max_length=64, blank=True)
-    address_city = models.CharField(max_length=40, blank=True)
-    address_country_code = models.CharField(max_length=64, blank=True, help_text="ISO 3166")
-    address_name = models.CharField(max_length=128, blank=True)
-    address_state = models.CharField(max_length=40, blank=True)
-    address_status = models.CharField(max_length=11, blank=True)
-    address_street = models.CharField(max_length=200, blank=True)
-    address_zip = models.CharField(max_length=20, blank=True)
-    contact_phone = models.CharField(max_length=20, blank=True)
-    first_name = models.CharField(max_length=64, blank=True)
-    last_name = models.CharField(max_length=64, blank=True)
-    payer_business_name = models.CharField(max_length=127, blank=True)
     payer_email = models.CharField(max_length=127, blank=True)
-    payer_id = models.CharField(max_length=13, blank=True)
-    
+
     # Payment Information Variables
     auth_amount = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    auth_exp = models.CharField(max_length=28, blank=True)
-    auth_id = models.CharField(max_length=19, blank=True)
     auth_status = models.CharField(max_length=9, blank=True) 
-    exchange_rate = models.DecimalField(max_digits=64, decimal_places=16, default=0, blank=True, null=True)
-    invoice = models.CharField(max_length=127, blank=True)
-    item_name = models.CharField(max_length=127, blank=True)
-    item_number = models.CharField(max_length=127, blank=True)
-    mc_currency = models.CharField(max_length=32, default="USD", blank=True)
-    mc_fee = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    mc_gross = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    mc_handling = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    mc_shipping = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    memo = models.CharField(max_length=255, blank=True)
-    num_cart_items = models.IntegerField(blank=True, default=0, null=True)
-    option_name1 = models.CharField(max_length=64, blank=True)
-    option_name2 = models.CharField(max_length=64, blank=True)
-    payer_status = models.CharField(max_length=10, blank=True)
-    payment_date = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    payment_gross = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
     payment_status = models.CharField(max_length=9, blank=True)
     payment_type = models.CharField(max_length=7, blank=True)
-    pending_reason = models.CharField(max_length=14, blank=True)
-    protection_eligibility=models.CharField(max_length=32, blank=True)
-    quantity = models.IntegerField(blank=True, default=1, null=True)
-    reason_code = models.CharField(max_length=15, blank=True)
-    remaining_settle = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    settle_amount = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    settle_currency = models.CharField(max_length=32, blank=True)
-    shipping = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    shipping_method = models.CharField(max_length=255, blank=True)
-    tax = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    transaction_entity = models.CharField(max_length=7, blank=True)
-    
-    # Auction Variables
-    auction_buyer_id = models.CharField(max_length=64, blank=True)
-    auction_closing_date = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    auction_multi_item = models.IntegerField(blank=True, default=0, null=True)
-    for_auction = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-        
-    # Recurring Payments Variables
-    amount = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    amount_per_cycle = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    initial_payment_amount = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    next_payment_date = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    outstanding_balance = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    payment_cycle= models.CharField(max_length=32, blank=True) #Monthly
-    period_type = models.CharField(max_length=32, blank=True)
-    product_name = models.CharField(max_length=128, blank=True)
-    product_type= models.CharField(max_length=128, blank=True)    
-    profile_status = models.CharField(max_length=32, blank=True)
-    recurring_payment_id = models.CharField(max_length=128, blank=True)  # I-FA4XVST722B9
-    rp_invoice_id= models.CharField(max_length=127, blank=True)  # 1335-7816-2936-1451
-    time_created = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    
-    # Subscription Variables
-    amount1 = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    amount2 = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    amount3 = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    mc_amount1 = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    mc_amount2 = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    mc_amount3 = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    password = models.CharField(max_length=24, blank=True)
-    period1 = models.CharField(max_length=32, blank=True)
-    period2 = models.CharField(max_length=32, blank=True)
-    period3 = models.CharField(max_length=32, blank=True)
-    reattempt = models.CharField(max_length=1, blank=True)
-    recur_times = models.IntegerField(blank=True, default=0, null=True)
-    recurring = models.CharField(max_length=1, blank=True)
-    retry_at = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    subscr_date = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    subscr_effective = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    subscr_id = models.CharField(max_length=19, blank=True)
-    username = models.CharField(max_length=64, blank=True)
-    
-    # Dispute Resolution Variables
-    case_creation_date = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    case_id = models.CharField(max_length=14, blank=True)
-    case_type = models.CharField(max_length=24, blank=True)
-    
+
     # Variables not categorized
-    receipt_id= models.CharField(max_length=64, blank=True)  # 1335-7816-2936-1451 
-    currency_code = models.CharField(max_length=32, default="USD", blank=True)
+    receipt_id= models.CharField(max_length=64, blank=True)  # 1335-7816-2936-1451     
     handling_amount = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
     transaction_subject = models.CharField(max_length=255, blank=True)
-
-    # @@@ Mass Pay Variables (Not Implemented, needs a separate model, for each transaction x)
-    # fraud_managment_pending_filters_x = models.CharField(max_length=255, blank=True) 
-    # option_selection1_x = models.CharField(max_length=200, blank=True) 
-    # option_selection2_x = models.CharField(max_length=200, blank=True) 
-    # masspay_txn_id_x = models.CharField(max_length=19, blank=True)
-    # mc_currency_x = models.CharField(max_length=32, default="USD", blank=True)
-    # mc_fee_x = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    # mc_gross_x = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    # mc_handlingx = models.DecimalField(max_digits=64, decimal_places=2, default=0, blank=True, null=True)
-    # payment_date = models.DateTimeField(blank=True, null=True, help_text="HH:MM:SS DD Mmm YY, YYYY PST")
-    # payment_status = models.CharField(max_length=9, blank=True)
-    # reason_code = models.CharField(max_length=15, blank=True)
-    # receiver_email_x = models.EmailField(max_length=127, blank=True)
-    # status_x = models.CharField(max_length=9, blank=True)
-    # unique_id_x = models.CharField(max_length=13, blank=True)
 
     # Non-PayPal Variables - full NIT/PDT query and time fields.    
     ipaddress = models.IPAddressField(blank=True)
