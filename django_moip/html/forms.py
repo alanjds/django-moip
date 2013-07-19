@@ -8,6 +8,8 @@ from django_moip.html.widgets import ValueHiddenInput, ReservedValueHiddenInput
 from django_moip.html.conf import (POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT, 
     RECEIVER_EMAIL)
 
+from furl import furl
+
 
 # 20:18:05 Jan 30, 2009 PST - PST timezone support is not included out of the box.
 # MOIP_DATE_FORMAT = ("%H:%M:%S %b. %d, %Y PST", "%H:%M:%S %b %d, %Y PST",)
@@ -82,7 +84,22 @@ class MoipPaymentsForm(forms.Form):
     %s
     <input type="image" src="%s" border="0" name="submit" alt="Pagar" />
 </form>""" % (POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
-        
+
+    def get_link(self, sandbox=False):
+        """ As MoIP accepts GET requests too, the form can be used as a link,
+        as if it had been submitted
+        """
+        raise NotImplementedError()
+
+        self.is_valid()
+        data = self.cleaned_data()
+        if sandbox:
+            f = furl(SANDBOX_POSTBACK_ENDPOINT)
+        else:
+            f = furl(POSTBACK_ENDPOINT)
+
+        link = f.add(data).url
+        return link
         
     def sandbox(self):
         return mark_safe(u"""<form action="%s" method="post">

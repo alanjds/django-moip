@@ -11,7 +11,8 @@ setup(
     author_email='alan.justino@yahoo.com.br',
     url='http://github.com/alanjds/django-moip',
     install_requires=[
-        'Django>=1.0'
+        'Django>=1.0',
+        'furl',
     ],
     tests_require = [
         'django-discover-runner'
