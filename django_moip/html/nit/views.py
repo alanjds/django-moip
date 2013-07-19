@@ -9,53 +9,51 @@ from django_moip.html.nit.models import MoipNIT
  
 @require_POST
 @csrf_exempt
-def ipn(request, item_check_callable=None):
+def nit(request, item_check_callable=None):
     """
-    PayPal NIT endpoint (notify_url).
-    Used by both PayPal Payments Pro and Payments Standard to confirm transactions.
-    http://tinyurl.com/d9vu9d
+    MoIP NIT endpoint (notify_url).
+    Used by MoIP to confirm transactions.
+    https://www.moip.com.br/AdmMainMenuMyData.do?method=transactionnotification
     
-    PayPal NIT Simulator:
-    https://developer.paypal.com/cgi-bin/devscr?cmd=_nit-link-session
+    (MoIP have no official NIT simulator)
     """
     #TODO: Clean up code so that we don't need to set None here and have a lot
     #      of if checks just to determine if flag is set.
     flag = None
-    ipn_obj = None
+    nit_obj = None
     
-    # Clean up the data as PayPal sends some weird values such as "N/A"
+    # Clean up the data as MoIP sends some weird values such as "N/A"
     data = request.POST.copy()
-    date_fields = ('time_created', 'payment_date', 'next_payment_date',
-                   'subscr_date', 'subscr_effective')
-    for date_field in date_fields:
-        if data.get(date_field) == 'N/A':
-            del data[date_field]
+    data_fields = ('id_transacao', 'valor', 'status_pagamento', 'cod_moip'
+                   'forma_pagamento', 'tipo_pagamento', 'email_consumidor')
 
     form = MoipNITForm(data)
     if form.is_valid():
         try:
             #When commit = False, object is returned without saving to DB.
-            ipn_obj = form.save(commit = False)
+            nit_obj = form.save(commit = False)
         except Exception, e:
             flag = "Exception while processing. (%s)" % e
     else:
         flag = "Invalid form. (%s)" % form.errors
  
-    if ipn_obj is None:
-        ipn_obj = MoipNIT()
+    if nit_obj is None:
+        nit_obj = MoipNIT()
     
     #Set query params and sender's IP address
-    ipn_obj.initialize(request)
+    nit_obj.initialize(request)
 
     if flag is not None:
         #We save errors in the flag field
-        ipn_obj.set_flag(flag)
+        nit_obj.set_flag(flag)
     else:
         # Secrets should only be used over SSL.
+        # btw, MoIP does not have this concept of "secret" yet!
+        # (but the code will still be here)
         if request.is_secure() and 'secret' in request.GET:
-            ipn_obj.verify_secret(form, request.GET['secret'])
+            nit_obj.verify_secret(form, request.GET['secret'])
         else:
-            ipn_obj.verify(item_check_callable)
+            nit_obj.verify(item_check_callable)
 
-    ipn_obj.save()
+    nit_obj.save()
     return HttpResponse("OKAY")
