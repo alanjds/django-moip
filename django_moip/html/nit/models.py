@@ -13,14 +13,6 @@ class MoipNIT(MoipHtmlBase):
         db_table = "moip_nit"
         verbose_name = "MoIP NIT"
 
-    def _postback(self):
-        """Perform MoIP Postback validation."""
-        return urllib2.urlopen(self.get_endpoint(), "cmd=_notify-validate&%s" % self.query).read()
-    
-    def _verify_postback(self):
-        if self.response != "VERIFIED":
-            self.set_flag("Invalid postback. (%s)" % self.response)
-            
     def send_signals(self):
         """Shout for the world to hear whether a txn was successful."""
         # Transaction signals:
