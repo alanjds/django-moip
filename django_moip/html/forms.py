@@ -53,6 +53,25 @@ class MoipPaymentsForm(forms.Form):
     # Optional fields
     frete = forms.ChoiceField(widget=forms.HiddenInput(), choices=SHIPPING_CHOICES, 
         initial=SHIPPING_CHOICES[0][0]) # up to 1chr
+    peso_compra = forms.IntegerField(widget=ValueHiddenInput()) # up to 9chr
+    pagador_nome = forms.CharField(widget=ValueHiddenInput()) # up to 90chr
+    pagador_email = forms.CharField(widget=ValueHiddenInput()) # up to 45chr
+    pagador_telefone = forms.IntegerField(widget=ValueHiddenInput()) # up to 10chr
+    pagador_logradouro = forms.CharField(widget=ValueHiddenInput()) # up to 45chr
+    pagador_numero = forms.IntegerField(widget=ValueHiddenInput()) # up to 9chr
+    pagador_complemento = forms.CharField(widget=ValueHiddenInput()) # up to 45chr
+    pagador_bairro = forms.CharField(widget=ValueHiddenInput()) # up to 45chr
+    pagador_numero = forms.IntegerField(widget=ValueHiddenInput()) # up to 9chr
+    pagador_complemento = forms.CharField(widget=ValueHiddenInput()) # up to 45chr
+    pagador_bairro = forms.CharField(widget=ValueHiddenInput()) # up to 45chr
+    pagador_cep = forms.IntegerField(widget=ValueHiddenInput()) # up to 8chr
+    pagador_cidade = forms.CharField(widget=ValueHiddenInput()) # up to 32chr
+    pagador_estado = forms.CharField(widget=ValueHiddenInput()) # up to 2chr
+    pagador_pais = forms.CharField(widget=ValueHiddenInput()) # up to 32chr
+    pagador_cpf = forms.IntegerField(widget=ValueHiddenInput()) # up to 11chr
+    pagador_celular = forms.IntegerField(widget=ValueHiddenInput()) # up to 10chr
+    pagador_sexo = forms.CharField(widget=ValueHiddenInput()) # up to 1chr
+    pagador_data_nascimento = forms.IntegerField(widget=ValueHiddenInput()) # up to 8chr
 
     def __init__(self, button_type="buy", *args, **kwargs):
         super(MoipPaymentsForm, self).__init__(*args, **kwargs)
