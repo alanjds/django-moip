@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 
-def duplicate_txn_id(ipn_obj):
+def duplicate_txn_id(nit_obj):
     """Returns True if a record with this transaction id exists and it is not
     a payment which has gone from pending to completed.
     
     """
-    query = ipn_obj._default_manager.filter(txn_id = ipn_obj.txn_id)
+    query = nit_obj._default_manager.filter(txn_id = nit_obj.txn_id)
     
-    if ipn_obj.payment_status == "Completed":
+    if nit_obj.payment_status == "Completed":
         # A payment that was pending and is now completed will have the same
         # NIT transaction id, so don't flag them as duplicates because it
         # means that the payment was finally successful!
@@ -25,10 +25,10 @@ def make_secret(form_instance, secret_fields=None):
     """
     # @@@ Moved here as temporary fix to avoid dependancy on auth.models.
     from django.contrib.auth.models import get_hexdigest
-    # @@@ amount is mc_gross on the NIT - where should mapping logic go?
-    # @@@ amount / mc_gross is not nessecarily returned as it was sent - how to use it? 10.00 vs. 10.0
+    # @@@ amount is 'valor' on the NIT - where should mapping logic go?
+    # @@@ amount / 'valor' is not nessecarily returned as it was sent - how to use it? 10.00 vs. 10.0
     # @@@ the secret should be based on the invoice or custom fields as well - otherwise its always the same.
-    
+
     # Build the secret with fields availible in both PaymentForm and the NIT. Order matters.
     if secret_fields is None:
         secret_fields = ['business', 'item_name']

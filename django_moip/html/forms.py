@@ -92,7 +92,7 @@ class MoipPaymentsForm(forms.Form):
         raise NotImplementedError()
 
         self.is_valid()
-        data = self.cleaned_data()
+        data = self.cleaned_data
         if sandbox:
             f = furl(SANDBOX_POSTBACK_ENDPOINT)
         else:
