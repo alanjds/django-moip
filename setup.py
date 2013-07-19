@@ -13,6 +13,10 @@ setup(
     install_requires=[
         'Django>=1.0'
     ],
+    tests_require = [
+        'django-discover-runner'
+    ],
+    test_suite = 'runtests.runtests',
     description = 'A pluggable Django application for integrating MoIP HTML (for now)',
     packages=find_packages(),
     include_package_data=True,
