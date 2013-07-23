@@ -11,8 +11,8 @@ RECEIVER_EMAIL = settings.MOIP_RECEIVER_EMAIL
 
 
 # API Endpoints.
-POSTBACK_ENDPOINT = "TODO https://www.paypal.com/cgi-bin/webscr"
-SANDBOX_POSTBACK_ENDPOINT = "TODO https://www.sandbox.paypal.com/cgi-bin/webscr"
+POSTBACK_ENDPOINT = "https://www.moip.com.br/PagamentoMoIP.do"
+SANDBOX_POSTBACK_ENDPOINT = "https://desenvolvedor.moip.com.br/sandbox/PagamentoMoIP.do"
 
 # Images
 IMAGE = getattr(settings, "MOIP_IMAGE", "https://static.moip.com.br/imgs/buttons/bt_pagar_c01_e04.png")
