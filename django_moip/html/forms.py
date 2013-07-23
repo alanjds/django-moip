@@ -89,10 +89,11 @@ class MoipPaymentsForm(forms.Form):
         """ As MoIP accepts GET requests too, the form can be used as a link,
         as if it had been submitted
         """
-        raise NotImplementedError()
 
-        self.is_valid()
-        data = self.cleaned_data
+        if not self.is_valid():
+            raise RuntimeError('Please check your MoIP settings and try again.') # should never occur
+
+        data = dict([(k,unicode(v).encode('utf-8')) for k,v in self.cleaned_data.items() if v])
         if sandbox:
             f = furl(SANDBOX_POSTBACK_ENDPOINT)
         else:
