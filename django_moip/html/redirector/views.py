@@ -10,10 +10,11 @@ def redirector(request):
     """MoIP redirector"""
     redirect_to = request.session.get('moip_go_after_return_url')
     if redirect_to:
-        redirector_successful.send(sender=request)
+        del request.session['moip_go_after_return_url']
+        redirector_successful.send(sender=request, redirect_to=redirect_to)
     else:
         # Fallback to standard "thank you" page
         redirect_to = 'lfs_thank_you'
-        redirector_failed.send(sender=request)
+        redirector_failed.send(sender=request, redirect_to=redirect_to)
 
     return redirect(redirect_to)
