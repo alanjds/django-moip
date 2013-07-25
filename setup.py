@@ -4,12 +4,16 @@ from setuptools import setup, find_packages
 
 import django_moip
 
+version = ".".join(map(str, django_moip.__version__))
+print 'Version:', version
+
 setup(
     name='django-moip',
-    version=".".join(map(str, django_moip.__version__)),
+    version=version,
     author='Alan Justino da Silva',
     author_email='alan.justino@yahoo.com.br',
     url='http://github.com/alanjds/django-moip',
+    download_url='https://github.com/alanjds/django-moip/archive/'+version+'.zip',
     install_requires=[
         'Django>=1.0',
         'furl',
