@@ -41,39 +41,39 @@ class MoipPaymentsForm(forms.Form):
     DONATE = 'donate'
 
     # Where the money goes.
-    id_carteira = forms.CharField(widget=ValueHiddenInput(), initial=RECEIVER_EMAIL) # up to 45chr
+    id_carteira = forms.CharField(widget=ValueHiddenInput(), initial=RECEIVER_EMAIL, max_length=45) # up to 45chr
     
     # Item information.
     valor = forms.IntegerField(widget=ValueHiddenInput()) # up to 9chr
-    nome = forms.CharField(widget=ValueHiddenInput()) # up to 64chr
+    nome = forms.CharField(widget=ValueHiddenInput(), max_length=64)
 
     # Recommended but optional
     # (Note: 'id_transacao' will be available to the NIT control if provided)
-    descricao = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 256chr
-    id_transacao = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 32chr
+    descricao = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=256)
+    id_transacao = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=32)
 
     # Optional fields
     frete = forms.ChoiceField(widget=forms.HiddenInput(), choices=SHIPPING_CHOICES, 
-        initial=SHIPPING_CHOICES[0][0], required=False) # up to 1chr
-    peso_compra = forms.IntegerField(widget=ValueHiddenInput(), required=False) # up to 9chr
-    pagador_nome = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 90chr
-    pagador_email = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 45chr
-    pagador_telefone = forms.IntegerField(widget=ValueHiddenInput(), required=False) # up to 10chr
-    pagador_logradouro = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 45chr
-    pagador_numero = forms.IntegerField(widget=ValueHiddenInput(), required=False) # up to 9chr
-    pagador_complemento = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 45chr
-    pagador_bairro = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 45chr
-    pagador_numero = forms.IntegerField(widget=ValueHiddenInput(), required=False) # up to 9chr
-    pagador_complemento = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 45chr
-    pagador_bairro = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 45chr
-    pagador_cep = forms.IntegerField(widget=ValueHiddenInput(), required=False) # up to 8chr
-    pagador_cidade = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 32chr
-    pagador_estado = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 2chr
-    pagador_pais = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 32chr
-    pagador_cpf = forms.IntegerField(widget=ValueHiddenInput(), required=False) # up to 11chr
-    pagador_celular = forms.IntegerField(widget=ValueHiddenInput(), required=False) # up to 10chr
-    pagador_sexo = forms.CharField(widget=ValueHiddenInput(), required=False) # up to 1chr
-    pagador_data_nascimento = forms.IntegerField(widget=ValueHiddenInput(), required=False) # up to 8chr
+        initial=SHIPPING_CHOICES[0][0], required=False) #, max_length=1)
+    peso_compra = forms.IntegerField(widget=ValueHiddenInput(), required=False) #, max_length=9)
+    pagador_nome = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=90)
+    pagador_email = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=45)
+    pagador_telefone = forms.IntegerField(widget=ValueHiddenInput(), required=False) #, max_length=10)
+    pagador_logradouro = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=45)
+    pagador_numero = forms.IntegerField(widget=ValueHiddenInput(), required=False) #, max_length=9)
+    pagador_complemento = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=45)
+    pagador_bairro = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=45)
+    pagador_numero = forms.IntegerField(widget=ValueHiddenInput(), required=False) #, max_length=9)
+    pagador_complemento = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=45)
+    pagador_bairro = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=45)
+    pagador_cep = forms.CharField(widget=ValueHiddenInput(), required=False) #, max_length=8)
+    pagador_cidade = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=32)
+    #pagador_estado = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=2)
+    pagador_pais = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=32)
+    pagador_cpf = forms.IntegerField(widget=ValueHiddenInput(), required=False) #, max_length=11)
+    pagador_celular = forms.IntegerField(widget=ValueHiddenInput(), required=False) #, max_length=10)
+    pagador_sexo = forms.CharField(widget=ValueHiddenInput(), required=False, max_length=1)
+    pagador_data_nascimento = forms.IntegerField(widget=ValueHiddenInput(), required=False) #, max_length=8)
 
     def __init__(self, button_type="buy", *args, **kwargs):
         super(MoipPaymentsForm, self).__init__(*args, **kwargs)
@@ -91,9 +91,9 @@ class MoipPaymentsForm(forms.Form):
         """
 
         if not self.is_valid():
-            raise RuntimeError('Please check your MoIP settings and try again.') # should never occur
+            raise RuntimeError('Please check your MoIP settings and try again.', self.errors) # should never occur
 
-        data = dict([(k,unicode(v).encode('utf-8')) for k,v in self.cleaned_data.items() if v])
+        data = dict([(k,unicode(v).encode('latin-1')) for k,v in self.cleaned_data.items() if v])
         if sandbox:
             f = furl(SANDBOX_POSTBACK_ENDPOINT)
         else:
