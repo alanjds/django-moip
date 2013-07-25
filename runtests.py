@@ -14,9 +14,6 @@ if not settings.configured:
         MOIP_RECEIVER_EMAIL='test@example.com',
         MOIP_TEST=True,
         # Please dont make me create another test account and remove this from here :)
-        MOIP_WPP_USER='dcrame_1278645792_biz_api1.gmail.com',
-        MOIP_WPP_PASSWORD='1278645801',
-        MOIP_WPP_SIGNATURE='A4k1.O6xTyld5TiKeVmCuOgqzLRuAKuTtSG.7BD3R9E8SBa-J0pbUeYp',
         INSTALLED_APPS=[
             'django_moip.html',
             'django_moip.html.nit',
