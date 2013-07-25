@@ -13,7 +13,7 @@ setup(
     author='Alan Justino da Silva',
     author_email='alan.justino@yahoo.com.br',
     url='http://github.com/alanjds/django-moip',
-    download_url='https://github.com/alanjds/django-moip/archive/'+version+'.zip',
+    download_url='https://github.com/alanjds/django-moip/tarball/'+version,
     install_requires=[
         'Django>=1.0',
         'furl',
